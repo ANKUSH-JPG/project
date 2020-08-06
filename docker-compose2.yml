@@ -1,0 +1,37 @@
+version: '3'
+services:
+    php-apache:
+        build:
+            context: ./php
+        ports:
+            - 3002:80
+        volumes:
+            - ./phpvolume:/var/www/html
+        links:
+            - 'mariadb'
+
+    mariadb:
+        image: mariadb:10.1
+        volumes:
+            - /volume_mount:/var/lib/mysql
+        environment:
+            TZ: "Europe/Rome"
+            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_USER: 'testuser'
+            MYSQL_PASSWORD: 'testpassword'
+            MYSQL_DATABASE: 'testdb'
+
+
+    nodejs-server:
+        build:
+            context: ./nodejs
+        ports:
+            - 3000:8080
+
+   
+    jupyter:
+        build: ./jupyter
+        ports:
+            - "8888:8888"
+
